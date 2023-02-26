@@ -229,7 +229,7 @@ api.post("/get-sales-amount/", verifyToken, (req, res) => {
     });
 });
 
-api.post("/get-popular-item/", verifyToken, (req, res) => {
+api.post("/get-top-customer/", verifyToken, (req, res) => {
     jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
         if (err) {
             res.sendStatus(403);
