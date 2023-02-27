@@ -235,7 +235,7 @@ api.post("/get-top-customer/", verifyToken, (req, res) => {
             res.sendStatus(403);
             return;
         }
-        connection.query("SELECT username, MAX(amount_purchased) FROM user_purchases_amount WHERE amount_purchased = (SELECT MAX(amount_purchased) FROM user_purchases_amount)",
+        connection.query("SELECT username, MAX(amount_purchased) as total FROM user_purchases_amount WHERE amount_purchased = (SELECT MAX(amount_purchased) FROM user_purchases_amount)",
             (err, result) => {
                 if (err) throw err;
                 res.json(result);
