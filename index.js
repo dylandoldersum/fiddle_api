@@ -184,34 +184,28 @@ api.post("/delete-category/:id", verifyToken, (req, res) => {
     })
 });
 
-api.post("/purchase-success", verifyToken, (req, res) => {
-    jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
-        if (err) {
-            res.sendStatus(403);
-            return;
-        }
-        let items = req.body.details.purchase_units;
-        let nowDate = new Date()
-            .toLocaleString("sv", { timeZone: "Europe/Paris" })
-            .slice(0, 19)
-            .replace("T", " ");
-        const userName = items[0].reference_id;
-        const amount = items[0].amount.value;
-        const email = items[0].payee.email_address;
-        connection.query("INSERT INTO user_purchases_amount (amount_purchased, username) VALUES (?, ?)",
-            [amount, userName],
+api.post("/purchase-success", (req, res) => {
+    let items = req.body.details.purchase_units;
+    let nowDate = new Date()
+        .toLocaleString("sv", { timeZone: "Europe/Paris" })
+        .slice(0, 19)
+        .replace("T", " ");
+    const userName = items[0].reference_id;
+    const amount = items[0].amount.value;
+    const email = items[0].payee.email_address;
+    connection.query("INSERT INTO user_purchases_amount (amount_purchased, username) VALUES (?, ?)",
+        [amount, userName],
+        (err, result) => {
+            if (err) throw err;
+            console.log("user_purchases_amount: row created")
+        });
+    items[0].items.map(item => {
+        connection.query("INSERT INTO purchases (username, sku, item_name, buy_date, redeemed, quantity, email) VALUES (?, ?, ?, '" + nowDate + "', 0, ?, ?)",
+            [userName, item.sku, item.name, item.quantity, email],
             (err, result) => {
                 if (err) throw err;
-                console.log("user_purchases_amount: row created")
+                console.log("purchases: row created!")
             });
-        items[0].items.map(item => {
-            connection.query("INSERT INTO purchases (username, sku, item_name, buy_date, redeemed, quantity, email) VALUES (?, ?, ?, '" + nowDate + "', 0, ?, ?)",
-                [userName, item.sku, item.name, item.quantity, email],
-                (err, result) => {
-                    if (err) throw err;
-                    console.log("purchases: row created!")
-                });
-        })
     })
 });
 
