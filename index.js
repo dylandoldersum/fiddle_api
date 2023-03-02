@@ -11,10 +11,10 @@ const api = express();
 //Establishing a mysql connection.
 function handleDisconnect() {
     connection = mysql.createConnection({
-        host: "35.212.41.68",
-        user: "ulrhyk2r4hxqa",
-        password: "occultrsps123!",
-        database: "db6gfiuwrgkuaq",
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "fiddle_store",
     });
 
     connection.connect(function (err) {
@@ -58,6 +58,13 @@ api.get("/get-products", (req, res) => {
 
 api.get("/get-categories", (req, res) => {
     connection.query("SELECT * FROM product_categories", (err, result) => {
+        if (err) throw err;
+        res.json(result);
+    });
+});
+
+api.get("/get-discount-products", (req, res) => {
+    connection.query("SELECT * FROM products WHERE discount_price > 0", (err, result) => {
         if (err) throw err;
         res.json(result);
     });
