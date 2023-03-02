@@ -11,10 +11,10 @@ const api = express();
 //Establishing a mysql connection.
 function handleDisconnect() {
     connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "fiddle_store",
+        host: "35.212.41.68",
+        user: "ulrhyk2r4hxqa",
+        password: "occultrsps123!",
+        database: "db6gfiuwrgkuaq",
     });
 
     connection.connect(function (err) {
