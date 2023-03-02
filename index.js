@@ -237,6 +237,20 @@ api.post("/get-top-customer/", verifyToken, (req, res) => {
     });
 });
 
+api.post("/get-total-sales-amount/", verifyToken, (req, res) => {
+    jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
+        if (err) {
+            res.sendStatus(403);
+            return;
+        }
+        connection.query("SELECT SUM(quantity * item_price) as total FROM `purchases` INNER JOIN `products` ON purchases.sku = products.sku",
+            (err, result) => {
+                if (err) throw err;
+                res.json(result);
+            })
+    });
+});
+
 api.post("/get-month-sales/", verifyToken, (req, res) => {
     jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
         if (err) {
