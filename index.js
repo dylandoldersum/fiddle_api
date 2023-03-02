@@ -87,11 +87,12 @@ api.post("/update-product", verifyToken, (req, res) => {
         const sku = req.body.sku;
         const item_name = req.body.name;
         const item_price = req.body.price;
+        const discount_price = req.body.discount;
         const item_image = req.body.thumbnail;
         const product_categorie = req.body.category;
         console.log(sku);
-        connection.query("UPDATE products SET sku=?, item_name=?, item_price=?, item_image=?, product_categorie=? WHERE id=?",
-            [sku, item_name, item_price, item_image, product_categorie, id],
+        connection.query("UPDATE products SET sku=?, item_name=?, item_price=?, discount_price=?, item_image=?, product_categorie=? WHERE id=?",
+            [sku, item_name, item_price, discount_price, item_image, product_categorie, id],
             (error) => {
                 if (error) throw error;
                 res.status(200).end();
@@ -128,10 +129,11 @@ api.post("/insert-product", verifyToken, (req, res) => {
         const sku = req.body.sku;
         const item_name = req.body.name;
         const item_price = req.body.price;
+        const discount_price = req.body.discount;
         const item_image = req.body.thumbnail;
         const product_categorie = req.body.category;
-        connection.query("INSERT INTO products (sku, item_name, item_price, item_image, product_categorie) VALUES (?, ?, ?, ?, ?)",
-            [sku, item_name, item_price, item_image, product_categorie, id],
+        connection.query("INSERT INTO products (sku, item_name, item_price, item_image, product_categorie, discount_price) VALUES (?, ?, ?, ?, ?, ?)",
+            [sku, item_name, item_price, item_image, product_categorie, discount_price],
             (error) => {
                 if (error) throw error;
                 res.status(200).end();
