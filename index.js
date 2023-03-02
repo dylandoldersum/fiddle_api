@@ -265,6 +265,20 @@ api.post("/get-month-sales/", verifyToken, (req, res) => {
     });
 });
 
+api.post("/get-all-purchases/", verifyToken, (req, res) => {
+    jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
+        if (err) {
+            res.sendStatus(403);
+            return;
+        }
+        connection.query("SELECT * FROM purchases",
+            (err, result) => {
+                if (err) throw err;
+                res.json(result);
+            })
+    });
+});
+
 api.post("/login", (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
